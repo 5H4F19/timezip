@@ -20,7 +20,7 @@ import Dollar from './dollar-square.png';
 import Wallet from './wallet2.png';
 import Warning from './warning.png';
 import ChevronRight from './chevron-right.png';
-import {Image} from 'react-native';
+import { Image } from 'react-native';
 import Onboarding from './onboarding.png';
 import Man from './man.png';
 import Plus from './plus.png';
@@ -33,6 +33,9 @@ import swap from './swap.png';
 import Secure from './secure.png';
 import Welcome from './welcome.png';
 import Explore from './explore.png';
+import MCZIP from './MCZIP.png';
+import Minizip from './minizip.png'
+import Files from './files.png'
 
 export default {
   ArrowUp: Image.resolveAssetSource(ArrowUp).uri.toString(),
@@ -69,4 +72,7 @@ export default {
   Welcome: Image.resolveAssetSource(Welcome).uri.toString(),
   Secure: Image.resolveAssetSource(Secure).uri.toString(),
   Explore: Image.resolveAssetSource(Explore).uri.toString(),
+  Mczip: Image.resolveAssetSource(MCZIP).uri.toString(),
+  Minizip: Image.resolveAssetSource(Minizip).uri.toString(),
+  Files: Image.resolveAssetSource(Files).uri.toString(),
 };

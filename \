@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, TouchableOpacity, Text, FlatList, Image, Modal, Linking, Share, Alert, StatusBar
+  View, TouchableOpacity, Text, FlatList, Image, Modal, Linking, Share, Alert
 } from 'react-native';
 import { Container } from './src/components/container';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DirectoryPickerResponse, types, DocumentPickerResponse, pick, pickDirectory } from 'react-native-document-picker'
 import { Button } from './src/components/button';
 import { NativeModules } from 'react-native';
+import assets from './src/assets';
+import { truncateTitle } from './src/utils/truncate';
 import { Br } from './src/components/br';
 import { BottomTab } from './src/screens/bottomTab';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { PortalProvider } from '@gorhom/portal';
-import { NavigationContainer } from '@react-navigation/native';
 
 
 const { ArchivingModule } = NativeModules
@@ -24,6 +23,10 @@ const ZipApp = () => {
   const [zipped, setZipped] = useState<string[]>()
   const [visible, setVisible] = useState<boolean>(false)
   const [selected, setSelected] = useState<string>()
+
+  useEffect(() => {
+    listFiles()
+  }, [])
 
   const pickFile = async () => {
     try {
@@ -54,6 +57,16 @@ const ZipApp = () => {
     }
   }
 
+  const listFiles = () => {
+    try {
+      ArchivingModule.allFiles((res: any) => {
+        console.log(res)
+        setZipped(res)
+      })
+    } catch (error) {
+
+    }
+  }
 
   const unzip = (s: string) => {
     ArchivingModule.Unzip(s, (path: string) => {
@@ -102,7 +115,7 @@ const ZipApp = () => {
           <Button onPress={pickFolder}>
             Pick a folder
           </Button>
-          <Button onPress={() => { }}>
+          <Button onPress={listFiles}>
             List
           </Button>
         </View>
@@ -156,22 +169,21 @@ const ZipApp = () => {
   // )
 }
 
+const FileView = ({ name, onLongPress }: { name: String, onLongPress: () => void }) => {
+  return (
+    <TouchableOpacity onPress={onLongPress} className='flex w-[46%] p-5 space-y-2 items-center border rounded-lg border-br m-2'>
+      <Image className='ml-2' source={{ uri: assets.Mczip }} style={{ resizeMode: 'contain', width: 100, height: 100 }} />
+      <Text className='text-txt'>{truncateTitle(name.substring(59))}</Text>
+    </TouchableOpacity>
+
+  )
+}
+
+
 
 const App = () => {
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <PortalProvider>
-          <View className='flex-1 bg-[#1A222D]'>
-            <StatusBar translucent backgroundColor="transparent" barStyle={'light-content'} />
-            <NavigationContainer>
-              <BottomTab />
-            </NavigationContainer>
-          </View>
-        </PortalProvider>
-      </GestureHandlerRootView>
-    </SafeAreaProvider>
-
+    <BottomTab />
   )
 }
 export default App;
